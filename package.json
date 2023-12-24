@@ -1,0 +1,43 @@
+{
+  "name": "promise-sync",
+  "version": "0.1.0",
+  "description": "hello",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/index.cjs",
+        "default": "./dist/index.d.cts"
+      },
+      "import": {
+        "types": "./dist/index.js",
+        "default": "./dist/index.d.ts"
+      }
+    }
+  },
+  "keywords": [],
+  "author": "ayasechan",
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/strictest": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "@vitest/coverage-v8": "^0.34.6",
+    "eslint": "^8.46.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-redos-detector": "^2.3.1",
+    "eslint-plugin-regexp": "^2.1.1",
+    "eslint-plugin-security": "^1.7.1",
+    "prettier": "^3.0.0",
+    "tsup": "^7.2.0",
+    "tsx": "^4.6.1",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.6"
+  }
+}

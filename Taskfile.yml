@@ -1,0 +1,43 @@
+version: "3"
+
+
+tasks:
+  default:
+    cmds:
+      - task -l
+    silent: true
+
+  prepare:
+    cmds:
+      - pnpm i
+
+  dev:
+    desc: start dev mode
+    cmds:
+      - npx tsup src/index.ts --dts --format cjs,esm --sourcemap inline --watch .
+
+  build:
+    desc: build project
+    aliases: [b]
+    cmds:
+      - npx tsup src/index.ts --dts --format cjs,esm
+      # - npx tsx build.ts
+  run:
+    desc: run project
+    cmds:
+      - node dist/index.js
+
+  test:
+    desc: test project
+    cmds:
+      - npx vitest
+
+  fmt:
+    desc: fmt code
+    cmds:
+      - npx prettier -w src tests
+
+  lint:
+    desc: lint project
+    cmds:
+      - npx eslint
