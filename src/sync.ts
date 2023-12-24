@@ -4,7 +4,7 @@ export class Semaphore {
   #max: number;
   constructor(max: number) {
     if (max <= 0) {
-      throw new Error("max arg muse be greater than 0");
+      throw new Error("max arg must be greater than 0");
     }
     this.#max = max;
   }
@@ -32,7 +32,7 @@ export class Semaphore {
 
 export class Lock {
   #sema = new Semaphore(1);
-  async lock() {
+  lock() {
     return this.#sema.require();
   }
   unlock() {
