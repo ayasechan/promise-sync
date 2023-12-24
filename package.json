@@ -12,12 +12,12 @@
   "exports": {
     ".": {
       "require": {
-        "types": "./dist/index.cjs",
-        "default": "./dist/index.d.cts"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       },
       "import": {
-        "types": "./dist/index.js",
-        "default": "./dist/index.d.ts"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     }
   },
