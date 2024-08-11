@@ -60,8 +60,10 @@ export class Channel<T> {
     this.#closed = true;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     this.#pushq.map((v) => v());
+    this.#pushq = [];
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     this.#takeq.map((v) => v(this.defaultv));
+    this.#takeq = [];
   }
 }
 
