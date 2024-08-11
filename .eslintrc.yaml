@@ -1,0 +1,37 @@
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/strict-type-checked
+  - plugin:regexp/recommended
+  - plugin:security/recommended
+env:
+  #   es2021: true
+  #   node: true
+  browser: true
+parser: "@typescript-eslint/parser"
+parserOptions:
+  sourceType: module
+  project: ./tsconfig.json
+
+plugins: ["@typescript-eslint", "import", "redos-detector"]
+rules:
+  "@typescript-eslint/no-non-null-assertion": 1
+  "@typescript-eslint/strict-boolean-expressions": 2
+  "@typescript-eslint/naming-convention": 2
+  "max-params": [2, max: 3]
+  "no-nested-ternary": 2
+  "no-implicit-coercion": 2
+  "prefer-template": 2
+  "@typescript-eslint/switch-exhaustiveness-check": 2
+  "no-restricted-globals": 2
+  "import/no-cycle": 2
+  "@typescript-eslint/consistent-type-imports": 2
+  "@typescript-eslint/consistent-type-exports": 2
+  "@typescript-eslint/require-array-sort-compare": 2
+
+
+ignorePatterns:
+  - types
+  - node_modules
+  - dist
+
+root: true

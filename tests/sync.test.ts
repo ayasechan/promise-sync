@@ -14,7 +14,7 @@ const newTasks = (n: number) => {
 
 describe("sync", () => {
   test("lock", async () => {
-    const locker = new sync.Lock();
+    const locker = new sync.Mutex();
     await Promise.all(
       newTasks(3).map(async (v) => {
         await locker.lock();
@@ -28,6 +28,7 @@ describe("sync", () => {
   test("semapha", async () => {
     const n = 3;
     const sema = new sync.Semaphore(n);
+    const start = Date.now();
     await Promise.all(
       newTasks(2 * n + 1).map(async (v) => {
         await sema.require();
@@ -36,13 +37,15 @@ describe("sync", () => {
         sema.release();
       }),
     );
+    const end = Date.now();
+    expect(end - start).greaterThan(3e3);
   });
 });
 
 describe("pool", () => {
   test("PromisePool", async () => {
-    const pool = new sync.PromisePool(3);
-    pool.submit(
+    const pool = new sync.PromisePool(3, 3);
+    await pool.submit(
       ...newTasks(9).map((v) => async () => {
         await v();
         await sync.sleep(1e3);

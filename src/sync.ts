@@ -9,10 +9,9 @@ export class Semaphore {
     this.#max = max;
   }
   require() {
-    const pr =
-      this.#count < this.#max
-        ? Promise.resolve()
-        : new Promise<void>((ok) => this.#queue.push(ok));
+    const pr = this.#count < this.#max
+      ? Promise.resolve()
+      : new Promise<void>((ok) => this.#queue.push(ok));
     this.#count += 1;
     return pr;
   }
@@ -30,7 +29,7 @@ export class Semaphore {
   }
 }
 
-export class Lock {
+export class Mutex {
   #sema = new Semaphore(1);
   lock() {
     return this.#sema.require();

@@ -1,22 +1,61 @@
-import { Semaphore } from "./sync.js";
+import { Channel, WaitGroup } from "./csp.js";
 
-type Task = () => Promise<void>;
+export type Task = () => Promise<void>;
+
 export class PromisePool {
-  #queue: Task[] = [];
-  #sema: Semaphore;
-  constructor(size: number) {
-    this.#sema = new Semaphore(size);
+  #taskCh: Channel<Task | null>;
+  #wg: WaitGroup = new WaitGroup();
+  constructor(readonly workerNum: number, readonly cap: number) {
+    this.#taskCh = new Channel(cap, null);
+    this.#wg.add(workerNum);
+    for (let i = 0; i < workerNum; i++) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.#process();
+    }
   }
-  submit(...tasks: Task[]) {
-    for (const t of tasks) {
-      this.#queue.push(async () => {
-        await this.#sema.require();
-        await t();
-        this.#sema.release();
+  group(): TaskGroup {
+    return new TaskGroup(this);
+  }
+  async #process(): Promise<void> {
+    // eslint-disable-next-line no-constant-condition, @typescript-eslint/no-unnecessary-condition
+    while (true) {
+      const task = await this.#taskCh.take();
+      if (!task) {
+        this.#wg.done();
+        return;
+      }
+      try {
+        await task();
+        // eslint-disable-next-line no-empty
+      } catch (error) {
+      }
+    }
+  }
+  async submit(...tasks: Task[]): Promise<void> {
+    await Promise.all(tasks.map((v) => this.#taskCh.push(v)));
+  }
+  wait(): Promise<void> {
+    this.#taskCh.close();
+    return this.#wg.wait();
+  }
+}
+
+class TaskGroup {
+  #wg: WaitGroup = new WaitGroup();
+  constructor(private pool: PromisePool) {
+  }
+  async submit(...tasks: Task[]) {
+    for (const task of tasks) {
+      await this.pool.submit(async () => {
+        try {
+          await task();
+        } finally {
+          this.#wg.done();
+        }
       });
     }
   }
   wait() {
-    return Promise.all(this.#queue.map((v) => v()));
+    return this.#wg.wait();
   }
 }
