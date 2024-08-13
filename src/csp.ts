@@ -56,6 +56,11 @@ export class Channel<T> {
       this.#lock.unlock();
     }
   }
+
+  get closed(): boolean {
+    return this.#closed;
+  }
+
   close() {
     this.#closed = true;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

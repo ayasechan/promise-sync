@@ -26,12 +26,15 @@ export class PromisePool {
       }
       try {
         await task();
-        // eslint-disable-next-line no-empty
       } catch (error) {
+        console.log(`execute task failed: ${String(error)}`);
       }
     }
   }
   async submit(...tasks: Task[]): Promise<void> {
+    if (this.#taskCh.closed) {
+      throw new Error(`can't put task into a closed pool`);
+    }
     await Promise.all(tasks.map((v) => this.#taskCh.push(v)));
   }
   wait(): Promise<void> {
