@@ -1,6 +1,6 @@
 {
   "name": "@ayasechan/promise-sync",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "hello",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

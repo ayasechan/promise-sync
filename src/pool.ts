@@ -48,10 +48,13 @@ class TaskGroup {
   constructor(private pool: PromisePool) {
   }
   async submit(...tasks: Task[]) {
+    this.#wg.add(tasks.length);
     for (const task of tasks) {
       await this.pool.submit(async () => {
         try {
           await task();
+        } catch (error) {
+          console.log(error);
         } finally {
           this.#wg.done();
         }
